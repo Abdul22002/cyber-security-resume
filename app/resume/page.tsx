@@ -1,9 +1,12 @@
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { FileText, Download, ArrowLeft } from "lucide-react"
+import { FileText, ExternalLink, ArrowLeft } from "lucide-react"
 import Link from "next/link"
 
 export default function ResumePage() {
+  const githubResumeUrl =
+    "https://github.com/Abdul22002/cyber-security-resume/blob/main/Abdul_jobresume_CyberSecurity_NEW.pdf"
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-950 to-gray-900 text-gray-100 py-16 px-4">
       <div className="container mx-auto max-w-4xl">
@@ -23,12 +26,12 @@ export default function ResumePage() {
               assessment, and security analysis.
             </p>
             <div className="flex gap-4">
-              <a href="/resume.pdf" download="Abdullrahman_Alghanim_Resume.pdf">
+              <Link href={githubResumeUrl} target="_blank">
                 <Button className="gap-2 bg-gradient-to-r from-cyan-600 to-emerald-600 hover:from-cyan-700 hover:to-emerald-700">
-                  <Download className="h-4 w-4" />
-                  Download PDF
+                  <ExternalLink className="h-4 w-4" />
+                  View
                 </Button>
-              </a>
+              </Link>
               <Link href="#contact">
                 <Button variant="outline" className="gap-2 border-cyan-700 hover:bg-cyan-900/20">
                   Contact Me
@@ -75,15 +78,15 @@ export default function ResumePage() {
           </div>
 
           <div className="mt-8 text-center">
-            <a href="/resume.pdf" download="Abdullrahman_Alghanim_Resume.pdf">
+            <Link href={githubResumeUrl} target="_blank">
               <Button
                 size="lg"
                 className="gap-2 bg-gradient-to-r from-cyan-600 to-emerald-600 hover:from-cyan-700 hover:to-emerald-700"
               >
-                <Download className="h-5 w-5" />
-                Download Complete Resume
+                <ExternalLink className="h-5 w-5" />
+                View Complete Resume
               </Button>
-            </a>
+            </Link>
           </div>
         </Card>
       </div>

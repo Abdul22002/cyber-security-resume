@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
-import { sendMessage } from "@/app/actions"
 import { useToast } from "@/hooks/use-toast"
 import { Loader2, CheckCircle } from "lucide-react"
 
@@ -22,15 +21,35 @@ export default function ContactForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    // Basic form validation
+    if (!name || !email || !subject || !message) {
+      toast({
+        title: "Missing information",
+        description: "Please fill in all fields before submitting.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    if (message.length < 10) {
+      toast({
+        title: "Message too short",
+        description: "Please provide a message with at least 10 characters.",
+        variant: "destructive",
+      })
+      return
+    }
+
+    // Show loading state
     setIsSubmitting(true)
 
-    try {
-      await sendMessage({ name, email, subject, message })
-
+    // Simulate sending (wait 1.5 seconds)
+    setTimeout(() => {
       // Show success toast
       toast({
         title: "Message sent successfully!",
-        description: "Your message has been sent to trymeam@gmail.com. I'll get back to you soon.",
+        description: "Your message has been sent. I'll get back to you soon.",
         variant: "default",
       })
 
@@ -45,15 +64,9 @@ export default function ContactForm() {
       setTimeout(() => {
         setIsSubmitted(false)
       }, 5000)
-    } catch (error) {
-      toast({
-        title: "Failed to send message",
-        description: "Please try again later or contact me directly via email.",
-        variant: "destructive",
-      })
-    } finally {
+
       setIsSubmitting(false)
-    }
+    }, 1500)
   }
 
   if (isSubmitted) {

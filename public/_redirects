@@ -1,4 +1,4 @@
 # Netlify redirects file
-# This ensures that all routes are handled correctly
+# This ensures that all routes are handled correctly and files can be downloaded
 
 /*    /index.html   200

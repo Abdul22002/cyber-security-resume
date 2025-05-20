@@ -13,7 +13,7 @@ import {
   Server,
   Globe,
   Mail,
-  Download,
+  ExternalLink,
 } from "lucide-react"
 import Link from "next/link"
 import ContactForm from "@/components/contact-form"
@@ -21,6 +21,19 @@ import SkillsRadar from "@/components/skills-radar"
 import DocumentCard from "@/components/document-card"
 import HeroAnimation from "@/components/hero-animation"
 import LabDocuments from "@/components/lab-documents"
+
+// GitHub document URLs
+const GITHUB_DOCS = {
+  resume: "https://github.com/Abdul22002/cyber-security-resume/blob/main/Abdul_jobresume_CyberSecurity_NEW.pdf",
+  proxmox: "https://github.com/Abdul22002/cyber-security-resume/blob/main/Configuration%20of%20proxmox%20Server%20.pdf",
+  linuxHardening:
+    "https://github.com/Abdul22002/cyber-security-resume/blob/main/LAB%2010%20-%20Linux%20System%20Hardening.pdf",
+  malwareAnalysis:
+    "https://github.com/Abdul22002/cyber-security-resume/blob/main/LAB%2010%20-%20Malware%20Analysis.pdf",
+  windowsHardening:
+    "https://github.com/Abdul22002/cyber-security-resume/blob/main/LAB%209%20Windows%20System%20Hardening.pdf",
+  databaseHacking: "https://github.com/Abdul22002/cyber-security-resume/blob/main/Lab%208%20database%20hacking.pdf",
+}
 
 export default function Home() {
   return (
@@ -41,7 +54,7 @@ export default function Home() {
             Information Security | University of South Florida
           </h2>
           <div className="flex flex-wrap justify-center gap-4 mb-12">
-            <Link href="https://github.com/Abdul22002" target="_blank">
+            <Link href="https://github.com/dashboard" target="_blank">
               <Button variant="outline" className="gap-2 border-cyan-700 hover:bg-cyan-900/20">
                 <Github className="h-5 w-5" />
                 GitHub
@@ -53,12 +66,12 @@ export default function Home() {
                 LinkedIn
               </Button>
             </Link>
-            <a href="/resume.pdf" download="Abdullrahman_Alghanim_Resume.pdf">
+            <Link href={GITHUB_DOCS.resume} target="_blank">
               <Button variant="outline" className="gap-2 border-cyan-700 hover:bg-cyan-900/20">
-                <Download className="h-5 w-5" />
-                Download Resume
+                <ExternalLink className="h-5 w-5" />
+                View Resume
               </Button>
-            </a>
+            </Link>
           </div>
           <Link href="#about" className="animate-bounce inline-block">
             <Button variant="ghost" size="icon" className="rounded-full">
@@ -205,7 +218,7 @@ export default function Home() {
       <section id="lab-documents" className="py-20 px-4">
         <div className="container mx-auto">
           <h2 className="text-3xl font-bold mb-12 text-center text-cyan-400">Lab Documents & Reports</h2>
-          <LabDocuments />
+          <LabDocuments githubDocs={GITHUB_DOCS} />
         </div>
       </section>
 
@@ -213,42 +226,42 @@ export default function Home() {
       <section id="projects" className="py-20 px-4 bg-gray-950">
         <div className="container mx-auto">
           <h2 className="text-3xl font-bold mb-12 text-center text-cyan-400">Projects & Labs</h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
             <DocumentCard
               title="Windows System Hardening"
-              filename="LAB-9-Windows-System-Hardening.pdf"
               description="Implementation of security controls and hardening techniques for Windows environments."
-              icon={<Server className="h-10 w-10 text-cyan-400" />}
+              icon={<Server className="h-8 w-8 text-cyan-400" />}
+              externalUrl={GITHUB_DOCS.windowsHardening}
             />
             <DocumentCard
               title="Linux System Hardening"
-              filename="LAB-10-Linux-System-Hardening.pdf"
               description="Comprehensive approach to securing Linux systems against common vulnerabilities."
-              icon={<Server className="h-10 w-10 text-emerald-400" />}
+              icon={<Server className="h-8 w-8 text-emerald-400" />}
+              externalUrl={GITHUB_DOCS.linuxHardening}
             />
             <DocumentCard
               title="Malware Analysis"
-              filename="LAB-10-Malware-Analysis.pdf"
               description="Techniques for analyzing and understanding malicious software behavior."
-              icon={<Database className="h-10 w-10 text-cyan-400" />}
+              icon={<Database className="h-8 w-8 text-cyan-400" />}
+              externalUrl={GITHUB_DOCS.malwareAnalysis}
             />
             <DocumentCard
-              title="Windows Forensics & Logging"
-              filename="LAB-11-Windows-Forensics-Logging.pdf"
-              description="Methods for investigating security incidents and configuring effective logging in Windows."
-              icon={<Shield className="h-10 w-10 text-emerald-400" />}
-            />
-            <DocumentCard
-              title="Linux Forensics & Logging"
-              filename="LAB-12-Linux-Forensics-Logging.pdf"
-              description="Forensic investigation techniques and logging configuration for Linux systems."
-              icon={<Shield className="h-10 w-10 text-cyan-400" />}
+              title="Proxmox Server Configuration"
+              description="Setup and configuration of Proxmox virtualization environment for security testing."
+              icon={<Server className="h-8 w-8 text-emerald-400" />}
+              externalUrl={GITHUB_DOCS.proxmox}
             />
             <DocumentCard
               title="Database Hacking"
-              filename="LAB-8-Database-Hacking.pdf"
               description="Analysis of database vulnerabilities and SQL injection techniques."
-              icon={<Database className="h-10 w-10 text-emerald-400" />}
+              icon={<Database className="h-8 w-8 text-emerald-400" />}
+              externalUrl={GITHUB_DOCS.databaseHacking}
+            />
+            <DocumentCard
+              title="Cybersecurity Resume"
+              description="My professional resume highlighting cybersecurity skills and experience."
+              icon={<FileText className="h-8 w-8 text-cyan-400" />}
+              externalUrl={GITHUB_DOCS.resume}
             />
           </div>
         </div>
@@ -272,7 +285,7 @@ export default function Home() {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400">&copy; {new Date().getFullYear()} Abdullrahman Alghanim</p>
             <div className="flex gap-4 mt-4 md:mt-0">
-              <Link href="https://github.com/Abdul22002" target="_blank">
+              <Link href="https://github.com/dashboard" target="_blank">
                 <Button variant="ghost" size="icon" className="text-gray-400 hover:text-cyan-400">
                   <Github className="h-5 w-5" />
                 </Button>
@@ -282,11 +295,11 @@ export default function Home() {
                   <Linkedin className="h-5 w-5" />
                 </Button>
               </Link>
-              <a href="/resume.pdf" download="Abdullrahman_Alghanim_Resume.pdf">
+              <Link href={GITHUB_DOCS.resume} target="_blank">
                 <Button variant="ghost" size="icon" className="text-gray-400 hover:text-cyan-400">
                   <FileText className="h-5 w-5" />
                 </Button>
-              </a>
+              </Link>
               <Link href="#contact">
                 <Button variant="ghost" size="icon" className="text-gray-400 hover:text-cyan-400">
                   <Mail className="h-5 w-5" />

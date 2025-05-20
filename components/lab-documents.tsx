@@ -5,14 +5,25 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Download, Eye, Terminal, Shield, Database, Lock } from "lucide-react"
+import { Terminal, Shield, Database, Lock, Server, FileText, ExternalLink } from "lucide-react"
 import Link from "next/link"
-import Image from "next/image"
 
-export default function LabDocuments() {
-  const [activeTab, setActiveTab] = useState("system-hardening")
+interface LabDocumentsProps {
+  githubDocs: {
+    resume: string
+    proxmox: string
+    linuxHardening: string
+    malwareAnalysis: string
+    windowsHardening: string
+    databaseHacking: string
+  }
+}
 
-  const labDocuments = {
+export default function LabDocuments({ githubDocs }: LabDocumentsProps) {
+  const [activeTab, setActiveTab] = useState("all")
+
+  // Define documents by category
+  const documentsByCategory = {
     "system-hardening": [
       {
         id: "lab-9",
@@ -20,19 +31,7 @@ export default function LabDocuments() {
         date: "04/20/2025",
         description: "Implementation of security controls and hardening techniques for Windows environments.",
         icon: <Shield className="h-6 w-6 text-cyan-400" />,
-        filename: "LAB-9-Windows-System-Hardening.pdf",
-        images: [
-          {
-            src: "/placeholder.svg?height=200&width=400",
-            alt: "Windows Registry Editor showing security settings",
-            caption: "Windows Registry Editor showing security settings",
-          },
-          {
-            src: "/placeholder.svg?height=200&width=400",
-            alt: "PowerShell output showing SMB configuration",
-            caption: "PowerShell output showing SMB configuration",
-          },
-        ],
+        externalUrl: githubDocs.windowsHardening,
         highlights: [
           "Implemented Windows security baselines",
           "Configured Windows Defender advanced settings",
@@ -46,24 +45,26 @@ export default function LabDocuments() {
         date: "04/18/2025",
         description: "Comprehensive approach to securing Linux systems against common vulnerabilities.",
         icon: <Terminal className="h-6 w-6 text-emerald-400" />,
-        filename: "LAB-10-Linux-System-Hardening.pdf",
-        images: [
-          {
-            src: "/placeholder.svg?height=200&width=400",
-            alt: "Terminal showing unattended-upgrades configuration",
-            caption: "Terminal showing unattended-upgrades configuration",
-          },
-          {
-            src: "/placeholder.svg?height=200&width=400",
-            alt: "Terminal output showing bash script execution",
-            caption: "Terminal output showing bash script execution",
-          },
-        ],
+        externalUrl: githubDocs.linuxHardening,
         highlights: [
           "Configured automatic security updates",
           "Implemented host-based firewall rules",
           "Secured SSH configuration",
           "Applied filesystem permissions hardening",
+        ],
+      },
+      {
+        id: "proxmox",
+        title: "Proxmox Server Configuration",
+        date: "04/15/2025",
+        description: "Setup and configuration of Proxmox virtualization environment for security testing.",
+        icon: <Server className="h-6 w-6 text-cyan-400" />,
+        externalUrl: githubDocs.proxmox,
+        highlights: [
+          "Virtualization environment setup",
+          "Network configuration for security testing",
+          "Resource allocation and management",
+          "Security hardening of the virtualization platform",
         ],
       },
     ],
@@ -74,68 +75,12 @@ export default function LabDocuments() {
         date: "04/18/2025",
         description: "Techniques for analyzing and understanding malicious software behavior.",
         icon: <Lock className="h-6 w-6 text-cyan-400" />,
-        filename: "LAB-10-Malware-Analysis.pdf",
-        images: [
-          {
-            src: "/placeholder.svg?height=200&width=400",
-            alt: "SCT folder contents showing toolkit files",
-            caption: "SCT folder contents showing toolkit files",
-          },
-          {
-            src: "/placeholder.svg?height=200&width=400",
-            alt: "Regedit screen showing registry keys",
-            caption: "Regedit screen showing registry keys",
-          },
-        ],
+        externalUrl: githubDocs.malwareAnalysis,
         highlights: [
           "Static analysis of malware samples",
           "Dynamic analysis in isolated environment",
           "Registry and file system impact assessment",
           "Behavioral analysis and IOC identification",
-        ],
-      },
-    ],
-    forensics: [
-      {
-        id: "lab-11",
-        title: "Windows Forensics & Logging",
-        date: "04/15/2025",
-        description: "Methods for investigating security incidents and configuring effective logging in Windows.",
-        icon: <Shield className="h-6 w-6 text-emerald-400" />,
-        filename: "LAB-11-Windows-Forensics-Logging.pdf",
-        images: [
-          {
-            src: "/placeholder.svg?height=200&width=400",
-            alt: "Windows Event Viewer showing security logs",
-            caption: "Windows Event Viewer showing security logs",
-          },
-        ],
-        highlights: [
-          "Windows Event Log configuration",
-          "Artifact collection and analysis",
-          "Timeline reconstruction",
-          "Evidence preservation techniques",
-        ],
-      },
-      {
-        id: "lab-12",
-        title: "Linux Forensics & Logging",
-        date: "04/10/2025",
-        description: "Forensic investigation techniques and logging configuration for Linux systems.",
-        icon: <Terminal className="h-6 w-6 text-cyan-400" />,
-        filename: "LAB-12-Linux-Forensics-Logging.pdf",
-        images: [
-          {
-            src: "/placeholder.svg?height=200&width=400",
-            alt: "Terminal showing syslog configuration",
-            caption: "Terminal showing syslog configuration",
-          },
-        ],
-        highlights: [
-          "Syslog configuration and analysis",
-          "Filesystem timeline analysis",
-          "Memory forensics techniques",
-          "Network traffic analysis",
         ],
       },
     ],
@@ -146,14 +91,7 @@ export default function LabDocuments() {
         date: "03/15/2025",
         description: "Analysis of database vulnerabilities and SQL injection techniques.",
         icon: <Database className="h-6 w-6 text-emerald-400" />,
-        filename: "LAB-8-Database-Hacking.pdf",
-        images: [
-          {
-            src: "/placeholder.svg?height=200&width=400",
-            alt: "SQL injection attack demonstration",
-            caption: "SQL injection attack demonstration",
-          },
-        ],
+        externalUrl: githubDocs.databaseHacking,
         highlights: [
           "SQL injection vulnerability assessment",
           "Database security configuration",
@@ -162,35 +100,45 @@ export default function LabDocuments() {
         ],
       },
     ],
-    "social-engineering": [
+    resume: [
       {
-        id: "lab-12-social",
-        title: "Social Engineering",
-        date: "04/05/2025",
-        description: "Analysis of social engineering tactics and development of defensive strategies.",
-        icon: <Lock className="h-6 w-6 text-emerald-400" />,
-        filename: "LAB-12-Social-Engineering.pdf",
-        images: [
-          {
-            src: "/placeholder.svg?height=200&width=400",
-            alt: "Phishing email analysis",
-            caption: "Phishing email analysis",
-          },
-        ],
+        id: "resume",
+        title: "Cybersecurity Resume",
+        date: "05/20/2025",
+        description: "My professional resume highlighting cybersecurity skills and experience.",
+        icon: <FileText className="h-6 w-6 text-emerald-400" />,
+        externalUrl: githubDocs.resume,
         highlights: [
-          "Phishing campaign analysis",
-          "Social engineering attack vectors",
-          "User awareness training techniques",
-          "Defensive countermeasures",
+          "Information Security specialization",
+          "System hardening expertise",
+          "Vulnerability assessment skills",
+          "Security analysis experience",
         ],
       },
     ],
   }
 
+  // Create the "all" category by combining all documents
+  const allDocuments = [
+    ...documentsByCategory["system-hardening"],
+    ...documentsByCategory["malware-analysis"],
+    ...documentsByCategory["database-security"],
+    ...documentsByCategory["resume"],
+  ]
+
+  // Final labDocuments object with "all" category
+  const labDocuments = {
+    all: allDocuments,
+    ...documentsByCategory,
+  }
+
   return (
-    <Tabs defaultValue="system-hardening" className="w-full" onValueChange={setActiveTab}>
+    <Tabs defaultValue="all" className="w-full" onValueChange={setActiveTab}>
       <div className="flex justify-center mb-8 overflow-x-auto pb-2">
         <TabsList className="bg-gray-800/50 p-1">
+          <TabsTrigger value="all" className="data-[state=active]:bg-cyan-900/30 data-[state=active]:text-cyan-400">
+            All
+          </TabsTrigger>
           <TabsTrigger
             value="system-hardening"
             className="data-[state=active]:bg-cyan-900/30 data-[state=active]:text-cyan-400"
@@ -204,70 +152,44 @@ export default function LabDocuments() {
             Malware Analysis
           </TabsTrigger>
           <TabsTrigger
-            value="forensics"
-            className="data-[state=active]:bg-cyan-900/30 data-[state=active]:text-cyan-400"
-          >
-            Forensics
-          </TabsTrigger>
-          <TabsTrigger
             value="database-security"
             className="data-[state=active]:bg-cyan-900/30 data-[state=active]:text-cyan-400"
           >
             Database Security
           </TabsTrigger>
-          <TabsTrigger
-            value="social-engineering"
-            className="data-[state=active]:bg-cyan-900/30 data-[state=active]:text-cyan-400"
-          >
-            Social Engineering
+          <TabsTrigger value="resume" className="data-[state=active]:bg-cyan-900/30 data-[state=active]:text-cyan-400">
+            Resume
           </TabsTrigger>
         </TabsList>
       </div>
 
       {Object.keys(labDocuments).map((category) => (
         <TabsContent key={category} value={category} className="mt-0">
-          <div className="grid gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {labDocuments[category].map((doc) => (
               <Card key={doc.id} className="bg-gray-800/50 border-gray-700 overflow-hidden">
-                <CardHeader className="pb-2">
+                <CardHeader className="pb-2 p-4">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
                       {doc.icon}
                       <div>
-                        <CardTitle className="text-xl text-cyan-400">{doc.title}</CardTitle>
-                        <p className="text-sm text-gray-400">{doc.date}</p>
+                        <CardTitle className="text-lg text-cyan-400">{doc.title}</CardTitle>
+                        <p className="text-xs text-gray-400">{doc.date}</p>
                       </div>
                     </div>
-                    <Badge variant="outline" className="bg-gray-900/50 text-emerald-400 border-emerald-800/50">
+                    <Badge variant="outline" className="bg-gray-900/50 text-emerald-400 border-emerald-800/50 text-xs">
                       CIS 4204
                     </Badge>
                   </div>
                 </CardHeader>
-                <CardContent className="pb-2">
-                  <p className="text-gray-300 mb-4">{doc.description}</p>
+                <CardContent className="pb-2 px-4 pt-0">
+                  <p className="text-gray-300 text-sm mb-3">{doc.description}</p>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                    {doc.images.map((image, index) => (
-                      <div key={index} className="relative group">
-                        <div className="overflow-hidden rounded-md border border-gray-700 bg-gray-900/50">
-                          <Image
-                            src={image.src || "/placeholder.svg"}
-                            alt={image.alt}
-                            width={400}
-                            height={200}
-                            className="object-cover w-full h-[200px] transition-transform duration-300 group-hover:scale-105"
-                          />
-                        </div>
-                        <p className="text-xs text-gray-400 mt-1 text-center">{image.caption}</p>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="bg-gray-900/50 rounded-md p-4 border border-gray-700">
-                    <h4 className="text-sm font-medium text-emerald-400 mb-2">Key Highlights</h4>
+                  <div className="bg-gray-900/50 rounded-md p-3 border border-gray-700">
+                    <h4 className="text-xs font-medium text-emerald-400 mb-2">Key Highlights</h4>
                     <ul className="space-y-1">
-                      {doc.highlights.map((highlight, index) => (
-                        <li key={index} className="text-sm text-gray-300 flex items-start">
+                      {doc.highlights.slice(0, 2).map((highlight, index) => (
+                        <li key={index} className="text-xs text-gray-300 flex items-start">
                           <span className="text-emerald-500 mr-2">•</span>
                           {highlight}
                         </li>
@@ -275,27 +197,17 @@ export default function LabDocuments() {
                     </ul>
                   </div>
                 </CardContent>
-                <CardFooter className="flex justify-between pt-4">
-                  <Link href={`/view/${doc.filename}`}>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="gap-2 border-gray-700 hover:bg-gray-700/50 hover:text-cyan-400"
-                    >
-                      <Eye className="h-4 w-4" />
-                      View Document
-                    </Button>
-                  </Link>
-                  <a href={`/${doc.filename}`} download={doc.filename}>
+                <CardFooter className="flex justify-center pt-2 pb-4">
+                  <Link href={doc.externalUrl} target="_blank">
                     <Button
                       variant="default"
                       size="sm"
                       className="gap-2 bg-gradient-to-r from-cyan-600 to-emerald-600 hover:from-cyan-700 hover:to-emerald-700"
                     >
-                      <Download className="h-4 w-4" />
-                      Download
+                      <ExternalLink className="h-4 w-4" />
+                      View
                     </Button>
-                  </a>
+                  </Link>
                 </CardFooter>
               </Card>
             ))}
